@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "788103915647",
+    "firebase_url": "https://lekovizdravstvomk.firebaseio.com",
+    "project_id": "lekovizdravstvomk",
+    "storage_bucket": "lekovizdravstvomk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788103915647:android:9a3a4e2598d25e97",
+        "android_client_info": {
+          "package_name": "com.tadi.lekovizdravstvomk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "788103915647-uhjaul2t5g4ml3uq07k8r7kdavd16vht.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tadi.lekovizdravstvomk",
+            "certificate_hash": "2d0935f4e3431aeaa74c7556307511bef9a379d8"
+          }
+        },
+        {
+          "client_id": "788103915647-oh7h9qi08m3pf5si8g5f5oibhmaq2rs5.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "788103915647-oh7h9qi08m3pf5si8g5f5oibhmaq2rs5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDh1ZvZGZBYW2kAFAUVxBckjv5J0pEV2-I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "788103915647-oh7h9qi08m3pf5si8g5f5oibhmaq2rs5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
