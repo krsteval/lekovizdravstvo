@@ -1,5 +1,7 @@
 package com.tadi.lekovizdravstvomk.model;
 
+import java.util.Comparator;
+
 public class Drug {
 
     private int id;
@@ -145,4 +147,26 @@ public class Drug {
     public void setMaloprodazna_cena(Double maloprodazna_cena) {
         this.maloprodazna_cena = maloprodazna_cena;
     }
+
+
+    private static final Comparator<Drug> ALPHABETICAL_COMPARATOR_NAME = new Comparator<Drug>() {
+        @Override
+        public int compare(Drug a, Drug b) {
+            return a.getLatinicno_ime().compareTo(b.getLatinicno_ime());
+        }
+    };
+
+    private static final Comparator<Drug> ALPHABETICAL_COMPARATOR_DatumNaResenie = new Comparator<Drug>() {
+        @Override
+        public int compare(Drug a, Drug b) {
+            return a.getDatum_na_resenie().compareTo(b.getDatum_na_resenie());
+        }
+    };
+
+    private static final Comparator<Drug> ALPHABETICAL_COMPARATOR_MaloprodaznaCena= new Comparator<Drug>() {
+        @Override
+        public int compare(Drug a, Drug b) {
+            return a.getMaloprodazna_cena().compareTo(b.getMaloprodazna_cena());
+        }
+    };
 }

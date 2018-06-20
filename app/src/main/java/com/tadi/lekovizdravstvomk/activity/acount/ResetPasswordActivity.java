@@ -49,6 +49,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 String email = inputEmail.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
+                    inputEmail.setError(getString(R.string.error_field_required));
+                    return;
+                } else  if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplication(), "Enter your registered email id", Toast.LENGTH_SHORT).show();
                     return;
                 }

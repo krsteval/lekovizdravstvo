@@ -1,16 +1,18 @@
 package com.tadi.lekovizdravstvomk;
 
+import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,7 +22,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,84 +35,52 @@ import com.google.firebase.database.ValueEventListener;
 import com.tadi.lekovizdravstvomk.activity.LoginActivity;
 import com.tadi.lekovizdravstvomk.activity.acount.MyProfile;
 import com.tadi.lekovizdravstvomk.adapter.DrugsAdapter;
+import com.tadi.lekovizdravstvomk.adapter.DrugsFilterAdapter;
+import com.tadi.lekovizdravstvomk.fragments.BaseFragment;
+import com.tadi.lekovizdravstvomk.fragments.DrugsDetailsFragment;
+import com.tadi.lekovizdravstvomk.fragments.DrugsRegisterFragment;
 import com.tadi.lekovizdravstvomk.model.Drug;
+import com.tadi.lekovizdravstvomk.model.WayOfPublishing;
+import com.yalantis.filter.listener.FilterListener;
+import com.yalantis.filter.widget.Filter;
 
-import org.json.JSONObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static boolean doubleBackToExitPressedOnce = false;
 
-    private FirebaseDatabase mFirebaseInstance;
     private FirebaseAuth auth;
+    private FirebaseUser user;
     private FirebaseAuth.AuthStateListener authListener;
 
-    private List<Drug> drugsList;
-    private RecyclerView recyclerView;
-    private DrugsAdapter mAdapter;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
-        drugsList = new ArrayList<>();
-        //get firebase auth instance
-        auth = FirebaseAuth.getInstance();
-
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                //get current user
-                if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
-                }
-                LayoutInflater inflater = (LayoutInflater) MainActivity.this
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view = inflater.inflate(R.layout.nav_header_main, null);
-                TextView textViewUserName = view.findViewById(R.id.userName);
-                TextView textViewUserEmail = view.findViewById(R.id.userEmail);
-                textViewUserName.setText(user.getEmail());
-                textViewUserEmail.setText(user.getEmail());
-            }
-        };
-        mFirebaseInstance = FirebaseDatabase.getInstance();
-        mFirebaseInstance.getReference("drugsregister").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e(TAG, "App title updated");
-
-                try {
-
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        drugsList.add(userSnapshot.getValue(Drug.class));
-                    }
-
-                } catch (Exception ex){
-                    Log.w("Exception", ex.toString());
-                }
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e(TAG, "Failed to read app title value.", error.toException());
-            }
-        });
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,41 +95,107 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        //get firebase auth instance
+        auth = FirebaseAuth.getInstance();
 
-        putDataFromServer();
-        mAdapter = new DrugsAdapter(drugsList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(mAdapter);
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+
+                View header = navigationView.getHeaderView(0);
+                TextView textViewUserEmail = (TextView) header.findViewById(R.id.userEmail);
+                if(user!= null){
+//                    textViewUserName.setText(user.getEmail());
+                    textViewUserEmail.setText(user.getEmail());
+                }
+                //get current user
+                if (user == null) {
+                    // user auth state is changed - user is null
+                    // launch login activity
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
+                }
+
+            }
+        };
+
+
+        loadFragmentForAction("drug_register", null);
+
     }
 
-    private void putDataFromServer() {
 
-    }
+    public void loadFragmentForAction(String action, Object additionalData) {
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(action);
+        if ((currentFragment != null) && currentFragment.isVisible()) {
+            return;
+        }
+
+        Fragment fragment = null;
+        if (action.equals("drug_register")) {
+            fab.setVisibility(View.VISIBLE);
+            fragment = new DrugsRegisterFragment();
+        }
+        else if (action.equals("drug_register_details")) {
+            fab.setVisibility(View.GONE);
+            Drug drug = null;
+            if(additionalData instanceof Drug)
+                drug = (Drug)additionalData;
+            fragment = DrugsDetailsFragment.newInstance(drug);
+        }
+        if (fragment != null) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = ft.replace(R.id.frame_content, fragment, action);
+            //we should not keep loading fragment in back stack
+            transaction.addToBackStack(action + (((BaseFragment) fragment).skipBack() ? "_skip_back" : ""));
+            ft.commitAllowingStateLoss();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.activity_main_actions, menu);
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+//        searchView.setSubmitButtonEnabled(true);
+        setupSearchView();
         return true;
     }
+    private void setupSearchView()
+    {
 
+        searchView.setIconifiedByDefault(true);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        if (searchManager != null)
+        {
+            List<SearchableInfo> searchables = searchManager.getSearchablesInGlobalSearch();
+
+            // Try to use the "applications" global search provider
+            SearchableInfo info = searchManager.getSearchableInfo(getComponentName());
+            for (SearchableInfo inf : searchables)
+            {
+                if (inf.getSuggestAuthority() != null && inf.getSuggestAuthority().startsWith("applications"))
+                {
+                    info = inf;
+                }
+            }
+            searchView.setSearchableInfo(info);
+        }
+
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnCloseListener(this);
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -165,12 +203,24 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_search:
+                break;
+            case R.id.action_changeview:
+                changeItemsView();
+                break;
+            default:
+                break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    private void changeItemsView() {
+
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment fragment = manager.findFragmentByTag("drug_register");
+        if(fragment != null)
+            ((DrugsRegisterFragment)fragment).shangeView();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -216,6 +266,85 @@ public class MainActivity extends AppCompatActivity
         super.onStop();
         if (authListener != null) {
             auth.removeAuthStateListener(authListener);
+        }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment fragment = manager.findFragmentByTag("drug_register");
+        if(fragment != null)
+            ((DrugsRegisterFragment)fragment).searchItems(query);
+
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    @Override
+    public boolean onClose() {
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment fragment = manager.findFragmentByTag("drug_register");
+        if(fragment != null)
+            ((DrugsRegisterFragment)fragment).clearSearch();
+        return false;
+    }
+
+    private void clearBackStack() {
+        FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+    }
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+
+        //find next fragment in backstack
+        FragmentManager.BackStackEntry backEntry = null;
+        String tag = "drug_register";
+        boolean hasEntryInBackStack = false;
+        for (int index = 1; index < getSupportFragmentManager().getBackStackEntryCount(); index++) {
+            backEntry = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1 - index);
+            tag = backEntry.getName();
+            if (!tag.contains("skip_back")) {
+
+                hasEntryInBackStack = true;
+                break;
+            }
+        }
+
+        if (hasEntryInBackStack) {
+            //clear back stack
+            getSupportFragmentManager().popBackStack(tag, 0);
+        } else {
+            // Default action on back pressed
+            if (doubleBackToExitPressedOnce) {
+                if (backEntry != null) {
+                    //clear back stack
+                    getSupportFragmentManager().popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                }
+
+                super.onBackPressed();
+                finish();
+                return;
+            }
+
+            doubleBackToExitPressedOnce = true;
+
+            Toast.makeText(this, getText(R.string.double_press_back_message), Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
         }
     }
 }

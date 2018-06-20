@@ -9,6 +9,9 @@
     <string name="title_activity_login">Sign in</string>
 
 
+    <string name="material_drawer_close">Close</string>
+    <string name="material_drawer_open">Open</string>
+
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
@@ -17,6 +20,7 @@
     <string name="change_password">Change Password</string>
     <string name="send_password_reset_email">Send Password reset email</string>
     <string name="remove_user">Remove user</string>
+    <string name="user">User</string>
     <string name="new_pass">New Password</string>
     <string name="title_activity_profile">Lekovi Zdravstvo</string>
     <string name="hint_email">Email</string>
@@ -38,5 +42,32 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
+    <string name="double_press_back_message">Please click BACK again to exit</string>
     <string name="log_out">Log out</string>
+
+    <string name="my_profile">My Profile</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+
+
+    <string name="search_hint">Search</string>
+    <string name="drug_register">Drug Register</string>
+
+    <string name="title_activity_calendar">"Pickups calendar"</string>
+    <string name="title_pickups_bottom_sheet">"Pickups on %1$s"</string>
+    <string name="pickup_interval">"Until %1$s"</string>
+    <string name="pickup_date_format">"MMMM dd"</string>
+    <string name="title_activity_confirm_schedules">"Confirm schedules"</string>
+
+    <string name="hours">"hours"</string>
+    <string name="schedule_help_no_type_selected">"Please, select a schedule type to keep on creating the schedule"</string>
+    <string name="schedule_type_routines_title">"Routine schedule"</string>
+    <string name="schedule_type_hourly_title">"Dosing interval"</string>
+    <string name="schedule_type_period_title">"Period + rest"</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

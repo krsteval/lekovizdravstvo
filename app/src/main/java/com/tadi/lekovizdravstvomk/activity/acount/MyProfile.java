@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +16,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.tadi.lekovizdravstvomk.MainActivity;
 import com.tadi.lekovizdravstvomk.R;
 import com.tadi.lekovizdravstvomk.activity.LoginActivity;
 
@@ -35,9 +35,16 @@ public class MyProfile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getString(R.string.app_name));
+        toolbar.setTitle(getString(R.string.my_profile));
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
 
@@ -138,18 +145,24 @@ public class MyProfile extends AppCompatActivity {
                 changePassword.setVisibility(View.VISIBLE);
                 sendEmail.setVisibility(View.GONE);
                 remove.setVisibility(View.GONE);
+
             }
         });
 
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
+                if (TextUtils.isEmpty(newPassword.getText().toString())) {
+                    changePassword.setError(getString(R.string.error_field_required));
+                    return;
+                }
+                    progressBar.setVisibility(View.VISIBLE);
                 if (user != null && !newPassword.getText().toString().trim().equals("")) {
                     if (newPassword.getText().toString().trim().length() < 6) {
                         newPassword.setError("Password too short, enter minimum 6 characters");
                         progressBar.setVisibility(View.GONE);
                     } else {
+
                         user.updatePassword(newPassword.getText().toString().trim())
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -196,7 +209,7 @@ public class MyProfile extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
-                                        Toast.makeText(MyProfile.this, "Reset password email is sent!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MyProfile.this, "Check email to reset your password!", Toast.LENGTH_SHORT).show();
                                         progressBar.setVisibility(View.GONE);
                                     } else {
                                         Toast.makeText(MyProfile.this, "Failed to send reset email!", Toast.LENGTH_SHORT).show();
@@ -259,6 +272,12 @@ public class MyProfile extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         auth.addAuthStateListener(authListener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
     }
 
     @Override

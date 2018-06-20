@@ -1,37 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="@drawable/shadow_layout"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
+    android:layout_margin="3dp"
     android:paddingBottom="@dimen/row_padding_vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/row_padding_vertical">
+    <RelativeLayout
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/latinicno_ime"
+        <ImageView
+            android:id="@+id/image_icon_ime"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:src="@drawable/icp_capsule"
+            />
+        <TextView
+            android:id="@+id/ime"
+            android:text="Ime"
+            android:layout_toRightOf="@+id/image_icon_ime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="12dp"
+            android:textStyle="bold"  />
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        android:baselineAligned="false">
 
-    <TextView
-        android:id="@+id/ime"
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_icon_generika"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:src="@drawable/icp_effervescent"
+                />
+            <TextView
+                android:id="@+id/generika"
+                android:layout_toRightOf="@+id/image_icon_generika"
+                android:text="Generika"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textSize="12dp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="2"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_icon_jacina"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:src="@drawable/ic_presentation_6"
+                />
+            <TextView
+                android:id="@+id/jacina"
+                android:layout_toRightOf="@+id/image_icon_jacina"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:text="0,9%"
+                android:textStyle="bold"
+                android:textSize="12dp"
+                android:layout_centerVertical="true"
+
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/latinicno_ime" />
+        android:baselineAligned="false">
 
-    <TextView
-        android:id="@+id/jacina"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:textColor="@color/colorPrimary"
-        android:layout_below="@id/latinicno_ime" />
+        <RelativeLayout
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/image_icon_proizvoditel"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:src="@drawable/icp_patches"
+                />
+            <TextView
+                android:id="@+id/proizvoditel"
+                android:layout_toRightOf="@+id/image_icon_proizvoditel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12dp"
+                android:layout_centerVertical="true"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:text="Proizvoditel"  />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_weight="2"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/image_icon_cena"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:src="@drawable/icp_inhaler"
+                />
+            <TextView
+                android:id="@+id/cena"
+                android:layout_toRightOf="@+id/image_icon_cena"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textColor="@color/bg_register"
+                android:textSize="12dp"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:layout_centerVertical="true"
+                android:text="Cena"
+                android:singleLine="true" />
+        </RelativeLayout>
 
-</RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

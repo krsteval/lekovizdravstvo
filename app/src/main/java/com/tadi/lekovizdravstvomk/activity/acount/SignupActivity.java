@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import com.tadi.lekovizdravstvomk.MainActivity;
 import com.tadi.lekovizdravstvomk.R;
+import com.tadi.lekovizdravstvomk.helpers.Common;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -58,10 +59,33 @@ public class SignupActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                boolean cancel = false;
+                View focusView = null;
                 String email = inputEmail.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
+                // Check for a valid email address.
+                if (TextUtils.isEmpty(email)) {
+                    inputEmail.setError(getString(R.string.error_field_required));
+                    focusView = inputEmail;
+                    cancel = true;
+                } else if (!Common.getInstance().isEmailValid(email)) {
+                    inputEmail.setError(getString(R.string.error_invalid_email));
+                    focusView = inputEmail;
+                    cancel = true;
+                }
+                // Check for a valid password, if the user entered one.
+                if (TextUtils.isEmpty(password) || !Common.getInstance().isPasswordValid(password)) {
+                    inputPassword.setError(getString(R.string.error_invalid_password));
+                    focusView = inputPassword;
+                    cancel = true;
+                }
+                if (cancel) {
+                    // There was an error; don't attempt login and focus the first
+                    // form field with an error.
+                    focusView.requestFocus();
+                    return;
+                }
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
                     return;
