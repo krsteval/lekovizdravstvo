@@ -19,6 +19,7 @@
     <string name="change_email">Change Email</string>
     <string name="change_password">Change Password</string>
     <string name="send_password_reset_email">Send Password reset email</string>
+    <string name="send_email">Send email</string>
     <string name="remove_user">Remove user</string>
     <string name="user">User</string>
     <string name="new_pass">New Password</string>
@@ -48,6 +49,7 @@
     <string name="my_profile">My Profile</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_body">This body is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
@@ -69,5 +71,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_contact_fragment">Contact</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_title">Title</string>
+    <string name="prompt_body">Content Body..</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 
 </resources>

@@ -18,7 +18,7 @@ public class DrugsAdapter  extends RecyclerView.Adapter<DrugsAdapter.MyViewHolde
     private List<Drug> moviesList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView ime, cena, jacina, proizvoditel, generika;
+        public TextView  ime,cena, jacina, proizvoditel, generika;
 
         public MyViewHolder(View view) {
             super(view);
@@ -28,7 +28,7 @@ public class DrugsAdapter  extends RecyclerView.Adapter<DrugsAdapter.MyViewHolde
             generika = (TextView) view.findViewById(R.id.generika);
             proizvoditel = (TextView) view.findViewById(R.id.proizvoditel);
 
-            ime.setSelected(true);
+//            ime.setSelected(true);
             cena.setSelected(true);
             generika.setSelected(true);
             proizvoditel.setSelected(true);

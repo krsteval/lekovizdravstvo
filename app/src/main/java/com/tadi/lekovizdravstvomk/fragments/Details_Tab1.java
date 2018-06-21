@@ -22,10 +22,16 @@ public class Details_Tab1 extends Fragment {
 
 
     private Unbinder unbinder;
-    @BindView(R.id.test_opis)
-    TextView title;
-    @BindView(R.id.test_opis1)
-    TextView title1;
+    @BindView(R.id.text_genericko_ime)
+    TextView genericko_ime;
+    @BindView(R.id.text_farmacevskaforma)
+    TextView farmacevskaforma;
+    @BindView(R.id.text_nacin_na_izdavanje)
+    TextView text_nacin_na_izdavanje;
+    @BindView(R.id.text_pakuvanje)
+    TextView text_pakuvanje;
+    @BindView(R.id.text_proizvoditel)
+    TextView text_proizvoditel;
 
     public static Drug data;
     public Details_Tab1() {
@@ -50,11 +56,16 @@ public class Details_Tab1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_details__tab1, container, false);
+        View view = inflater.inflate(R.layout.fragment_details_tab1, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        title.setText(data.getPakuvanje());
-        title1.setText(data.getFarmacevska_forma());
+        genericko_ime.setText(data.getIme());
+        farmacevskaforma.setText(data.getFarmacevska_forma());
+        text_pakuvanje.setText(data.getFarmacevska_forma());
+        text_nacin_na_izdavanje.setText(data.getNacin_izdavanje());
+        text_pakuvanje.setText(data.getFarmacevska_forma());
+        text_proizvoditel.setText(data.getProizvoditel());
+
         return view;
     }
 

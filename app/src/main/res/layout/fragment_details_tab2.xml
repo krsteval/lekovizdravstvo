@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:orientation="vertical"
+    tools:context=".fragments.Details_Tab1">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+
+        android:text="Носител на одобрение"
+        android:textSize="@dimen/fab_margin"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_nositel_odobrenie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="полиолефинска ќеса со систем за поврзување за кој не е потребна игла х 250 ml"
+        android:textSize="@dimen/fab_margin" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Број на решение"
+        android:textSize="@dimen/fab_margin"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_br_resenie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="полиолефинска ќеса со систем за поврзување за кој не е потребна игла х 250 ml"
+        android:textSize="@dimen/fab_margin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Датум на решение"
+        android:textSize="@dimen/fab_margin"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_datum_resenie"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="полиолефинска ќеса со систем за поврзување за кој не е потребна игла х 250 ml"
+        android:textSize="@dimen/fab_margin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Датум на важност"
+        android:textSize="@dimen/fab_margin"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_datum_vaznost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="полиолефинска ќеса со систем за поврзување за кој не е потребна игла х 250 ml"
+        android:textSize="@dimen/fab_margin" />
+</LinearLayout>

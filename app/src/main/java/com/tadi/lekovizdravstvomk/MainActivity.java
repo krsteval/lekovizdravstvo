@@ -37,8 +37,10 @@ import com.tadi.lekovizdravstvomk.activity.acount.MyProfile;
 import com.tadi.lekovizdravstvomk.adapter.DrugsAdapter;
 import com.tadi.lekovizdravstvomk.adapter.DrugsFilterAdapter;
 import com.tadi.lekovizdravstvomk.fragments.BaseFragment;
+import com.tadi.lekovizdravstvomk.fragments.ContactFragment;
 import com.tadi.lekovizdravstvomk.fragments.DrugsDetailsFragment;
 import com.tadi.lekovizdravstvomk.fragments.DrugsRegisterFragment;
+import com.tadi.lekovizdravstvomk.fragments.MapFragment;
 import com.tadi.lekovizdravstvomk.model.Drug;
 import com.tadi.lekovizdravstvomk.model.WayOfPublishing;
 import com.yalantis.filter.listener.FilterListener;
@@ -138,8 +140,16 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment = null;
         if (action.equals("drug_register")) {
-            fab.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.GONE);
             fragment = new DrugsRegisterFragment();
+        }
+        else if (action.equals("map_locations")) {
+            fab.setVisibility(View.GONE);
+            fragment = new MapFragment();
+        }
+        else if (action.equals("contact")) {
+            fab.setVisibility(View.GONE);
+            fragment = new ContactFragment();
         }
         else if (action.equals("drug_register_details")) {
             fab.setVisibility(View.GONE);
@@ -237,12 +247,15 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_map) {
+            loadFragmentForAction("map_locations", null);
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
             signOut();
+        } else if (id == R.id.nav_manage) {
+            loadFragmentForAction("contact", null);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
