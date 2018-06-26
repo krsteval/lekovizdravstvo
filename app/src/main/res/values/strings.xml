@@ -25,9 +25,11 @@
     <string name="new_pass">New Password</string>
     <string name="title_activity_profile">Lekovi Zdravstvo</string>
     <string name="hint_email">Email</string>
+    <string name="hint_add_comment">Insert review content..</string>
     <string name="hint_password">Password</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
+    <string name="btn_add_comment">Add comment</string>
     <string name="txt_not_a_member">Not a member?</string>
     <string name="btn_link_to_register">Click here to registered in Lekovi Zdravstvo now!</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
@@ -85,5 +87,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string name="firebase">AIzaSyAzfnIMnQPiapCRYR8MjbiJK19U8U3H2h0</string>
+    <string name="map_key">AIzaSyDh1ZvZGZBYW2kAFAUVxBckjv5J0pEV2-I</string>
 
 </resources>

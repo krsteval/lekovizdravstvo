@@ -17,6 +17,7 @@ import java.util.List;
 public class DrugsFilterAdapter  extends FilterAdapter<WayOfPublishing> {
     Context context;
 
+
     public DrugsFilterAdapter(@NotNull List<? extends WayOfPublishing> items, Context context) {
         super(items);
         this.context = context;

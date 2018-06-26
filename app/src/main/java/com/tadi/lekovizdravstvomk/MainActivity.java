@@ -26,31 +26,28 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.tadi.lekovizdravstvomk.activity.LoginActivity;
 import com.tadi.lekovizdravstvomk.activity.acount.MyProfile;
-import com.tadi.lekovizdravstvomk.adapter.DrugsAdapter;
-import com.tadi.lekovizdravstvomk.adapter.DrugsFilterAdapter;
 import com.tadi.lekovizdravstvomk.fragments.BaseFragment;
 import com.tadi.lekovizdravstvomk.fragments.ContactFragment;
 import com.tadi.lekovizdravstvomk.fragments.DrugsDetailsFragment;
 import com.tadi.lekovizdravstvomk.fragments.DrugsRegisterFragment;
+import com.tadi.lekovizdravstvomk.fragments.FavouriteDrugsFragment;
 import com.tadi.lekovizdravstvomk.fragments.MapFragment;
+import com.tadi.lekovizdravstvomk.fragments.MyComentsFragment;
+import com.tadi.lekovizdravstvomk.helpers.Common;
 import com.tadi.lekovizdravstvomk.model.Drug;
-import com.tadi.lekovizdravstvomk.model.WayOfPublishing;
-import com.yalantis.filter.listener.FilterListener;
-import com.yalantis.filter.widget.Filter;
+import com.tadi.lekovizdravstvomk.model.MonitoringDatabase;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -75,6 +72,12 @@ public class MainActivity extends AppCompatActivity
 
     SearchView searchView;
 
+    Menu menu;
+    MenuItem itemSearch = null;
+    MenuItem itemChangeView = null;
+
+    public boolean isGridFragment = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,11 +86,15 @@ public class MainActivity extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+
+                Snackbar.make(view, "Contact administrator of app", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                loadFragmentForAction("contact", null);
             }
         });
 
@@ -102,7 +109,6 @@ public class MainActivity extends AppCompatActivity
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
-
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -113,6 +119,7 @@ public class MainActivity extends AppCompatActivity
                 if(user!= null){
 //                    textViewUserName.setText(user.getEmail());
                     textViewUserEmail.setText(user.getEmail());
+                    Common.getInstance().emailAddressIdentifire = user.getEmail();
                 }
                 //get current user
                 if (user == null) {
@@ -139,20 +146,50 @@ public class MainActivity extends AppCompatActivity
         }
 
         Fragment fragment = null;
+
+        checkActiveFragment();
+
         if (action.equals("drug_register")) {
             fab.setVisibility(View.GONE);
             fragment = new DrugsRegisterFragment();
+
         }
         else if (action.equals("map_locations")) {
             fab.setVisibility(View.GONE);
             fragment = new MapFragment();
+
+            itemSearch.setVisible(false);
+            itemChangeView.setVisible(false);
+        }
+        else if (action.equals("my_comments")) {
+            fab.setVisibility(View.GONE);
+            fragment = new MyComentsFragment();
+
+            itemSearch.setVisible(false);
+            itemChangeView.setVisible(false);
+        }
+        else if (action.equals("favorite")) {
+            fab.setVisibility(View.GONE);
+
+            List<Drug> drugsFavList = App.getDatabase().receptionDao().getAllFavoritesDrugs();
+            fragment = FavouriteDrugsFragment.newInstance(drugsFavList);
+
+            itemSearch.setVisible(false);
+            itemChangeView.setVisible(false);
         }
         else if (action.equals("contact")) {
             fab.setVisibility(View.GONE);
             fragment = new ContactFragment();
+
+            itemSearch.setVisible(false);
+            itemChangeView.setVisible(false);
         }
         else if (action.equals("drug_register_details")) {
             fab.setVisibility(View.GONE);
+
+            itemSearch.setVisible(false);
+            itemChangeView.setVisible(false);
+
             Drug drug = null;
             if(additionalData instanceof Drug)
                 drug = (Drug)additionalData;
@@ -168,9 +205,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    private void checkActiveFragment() {
+        if(fab != null)
+            fab.setVisibility(View.VISIBLE);
+        if(menu!= null){
+            itemSearch = menu.findItem(R.id.action_search);
+            itemChangeView = menu.findItem(R.id.action_changeview);
+            itemSearch.setVisible(true);
+            itemChangeView.setVisible(true);
+
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.activity_main_actions, menu);
+        this.menu = menu;
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) menu.findItem(R.id.action_search)
@@ -212,11 +267,15 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         switch (id){
             case R.id.action_search:
                 break;
             case R.id.action_changeview:
+                if(isGridFragment)
+                    isGridFragment = false;
+                else
+                    isGridFragment = true;
+
                 changeItemsView();
                 break;
             default:
@@ -230,7 +289,8 @@ public class MainActivity extends AppCompatActivity
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentByTag("drug_register");
         if(fragment != null)
-            ((DrugsRegisterFragment)fragment).shangeView();
+            ((DrugsRegisterFragment)fragment).shangeView(isGridFragment);
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -245,8 +305,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
-
+        } else if (id == R.id.nav_favorite) {
+            loadFragmentForAction("favorite", null);
         } else if (id == R.id.nav_map) {
             loadFragmentForAction("map_locations", null);
 
@@ -254,8 +314,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             signOut();
-        } else if (id == R.id.nav_manage) {
-            loadFragmentForAction("contact", null);
+        } else if (id == R.id.my_coments) {
+            loadFragmentForAction("my_comments", null);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -326,11 +386,16 @@ public class MainActivity extends AppCompatActivity
         for (int index = 1; index < getSupportFragmentManager().getBackStackEntryCount(); index++) {
             backEntry = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1 - index);
             tag = backEntry.getName();
+
+            if (tag.equals("drug_register")) {
+                checkActiveFragment();
+            }
             if (!tag.contains("skip_back")) {
 
                 hasEntryInBackStack = true;
                 break;
             }
+
         }
 
         if (hasEntryInBackStack) {
@@ -360,4 +425,6 @@ public class MainActivity extends AppCompatActivity
             }, 2000);
         }
     }
+
+
 }

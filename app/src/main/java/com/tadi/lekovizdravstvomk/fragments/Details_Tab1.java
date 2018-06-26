@@ -38,18 +38,18 @@ public class Details_Tab1 extends Fragment {
         // Required empty public constructor
     }
 
-    public static Details_Tab1 newInstance(Drug data) {
-        Details_Tab1 fragment = new Details_Tab1();
-        Bundle b = new Bundle();
-        Details_Tab1.data = data;
-
-        fragment.setArguments(b);
-        return fragment;
-    }
-
     @Override
     public void setArguments(Bundle args) {
+        data = args.getParcelable("data_item");
         super.setArguments(args);
+    }
+    public static Details_Tab1 newInstance(Drug dataItem) {
+        Details_Tab1 fragment = new Details_Tab1();
+        Bundle b = new Bundle();
+        DrugsDetailsFragment.data = dataItem;
+        b.putParcelable("data_item", dataItem);
+        fragment.setArguments(b);
+        return fragment;
     }
 
     @Override

@@ -69,4 +69,15 @@
         android:layout_height="wrap_content"
         android:text="полиолефинска ќеса со систем за поврзување за кој не е потребна игла х 250 ml"
         android:textSize="@dimen/fab_margin" />
+
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:layout_marginTop="25dp"
+        android:stepSize="0.5"
+        android:progressTint="@color/gray"
+        android:rating="2.5" />
 </LinearLayout>

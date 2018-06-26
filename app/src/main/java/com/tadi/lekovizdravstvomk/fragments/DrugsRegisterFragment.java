@@ -21,13 +21,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tadi.lekovizdravstvomk.App;
 import com.tadi.lekovizdravstvomk.R;
 import com.tadi.lekovizdravstvomk.adapter.DrugsAdapter;
 import com.tadi.lekovizdravstvomk.adapter.DrugsFilterAdapter;
+import com.tadi.lekovizdravstvomk.helpers.Common;
 import com.tadi.lekovizdravstvomk.model.Drug;
+import com.tadi.lekovizdravstvomk.model.MonitoringDatabase;
 import com.tadi.lekovizdravstvomk.model.WayOfPublishing;
 import com.yalantis.filter.listener.FilterListener;
 import com.yalantis.filter.widget.Filter;
+//import com.yalantis.filter.listener.FilterListener;
+//import com.yalantis.filter.widget.Filter;
+//
+//import org.jetbrains.annotations.NotNull;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +51,6 @@ import butterknife.Unbinder;
 public class DrugsRegisterFragment extends BaseFragment {
 
     private static final String TAG = DrugsRegisterFragment.class.getSimpleName();
-
     private FirebaseDatabase mFirebaseInstance;
 
     private List<WayOfPublishing> wayOfPublishingList;
@@ -83,16 +89,33 @@ public class DrugsRegisterFragment extends BaseFragment {
         itemFilters = new ArrayList<>();
         loader.setVisibility(View.VISIBLE);
         drugsList = new ArrayList<>();
+
+//        Filter mFilter = (Filter<WayOfPublishing>) getView().findViewById(R.id.filter);
+//        mFilter.setAdapter(new DrugsFilterAdapter(wayOfPublishingList, getContext()));
+//        mFilter.setListener(mListener);
+//
+//        mFilter.setNoSelectedItemText("Selected items");
+//        mFilter.build();
+
+
         mFirebaseInstance = FirebaseDatabase.getInstance();
+
+        Common.getInstance().drugList = App.getDatabase().receptionDao().getAllDrugs();
         mFirebaseInstance.getReference("drugsregister").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.e(TAG, "App dataSnapshot updated");
                 drugsList.clear();
                 try {
-
+                    int br =0;
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        drugsList.add(userSnapshot.getValue(Drug.class));
+                        Drug item = userSnapshot.getValue(Drug.class);
+                        drugsList.add(item);
+                        if(Common.getInstance().drugList.size()!=0)
+                            item.setFavovite(Common.getInstance().drugList.get(br).isFavovite());
+
+                        App.getDatabase().receptionDao().addDrug(item);
+                        br++;
                     }
 
                 } catch (Exception ex){
@@ -113,13 +136,12 @@ public class DrugsRegisterFragment extends BaseFragment {
                             for (DataSnapshot wayOfPublishingSnapshot : dataSnapshot.getChildren()) {
                                 wayOfPublishingList.add(wayOfPublishingSnapshot.getValue(WayOfPublishing.class));
                             }
-                            Filter mFilter = (Filter<WayOfPublishing>) getView().findViewById(R.id.filter);
-                            mFilter.setAdapter(new DrugsFilterAdapter(wayOfPublishingList, getContext()));
-                            mFilter.setListener(mListener);
-
-                            //the text to show when there's no selected items
-                            mFilter.setNoSelectedItemText("");
-                            mFilter.build();
+//                            Filter mFilter = (Filter<WayOfPublishing>) getView().findViewById(R.id.filter);
+//                            mFilter.setAdapter(new DrugsFilterAdapter(wayOfPublishingList, getContext()));
+//                            mFilter.setListener(mListener);
+//
+//                            mFilter.setNoSelectedItemText("Selected items");
+//                            mFilter.build();
                         } catch (Exception ex){
                             Log.w("Exception", ex.toString());
                         }
@@ -197,9 +219,14 @@ public class DrugsRegisterFragment extends BaseFragment {
 
     }
 
-    public void shangeView() {
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+    public void shangeView(boolean isGridFragment) {
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 1);
+        if(!isGridFragment){
+             mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        }
         recyclerView.setLayoutManager(mLayoutManager);
+        mAdapter.customNotifyDataSetChanged(isGridFragment);
+
     }
 
     private final SortedList.Callback<Drug> mCallback = new SortedList.Callback<Drug>() {

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shadow_layout"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:layout_margin="3dp"
+    android:paddingBottom="@dimen/row_padding_vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/row_padding_vertical">
+    <RelativeLayout
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_icon_ime"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:src="@drawable/avatar1"
+            />
+        <TextView
+            android:id="@+id/ime"
+            android:text="Ime"
+            android:layout_toEndOf="@+id/image_icon_ime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            android:textStyle="bold"  />
+        <TextView
+            android:id="@+id/dateCreated"
+            android:text="22.11.2018"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:scrollHorizontally="true"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            android:textStyle="bold"  />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_toRightOf="@+id/image_icon_generika"
+        android:text="Opissss s ss "
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:textSize="12dp" />
+
+
+
+</LinearLayout>

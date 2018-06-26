@@ -37,6 +37,13 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
+    implementation 'com.google.android.gms:play-services:12.0.1'
+
+
+    compile 'dev.dworks.libs:volleyplus:+'
+
+    compile 'android.arch.lifecycle:extensions:1.1.1'
+    compile 'android.arch.persistence.room:runtime:1.1.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -44,5 +51,9 @@ dependencies {
 
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'com.github.clans:fab:1.6.4'
+
+    annotationProcessor 'android.arch.lifecycle:compiler:1.1.1'
+    annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+
 }
 apply plugin: 'com.google.gms.google-services'

@@ -4,6 +4,7 @@ package com.tadi.lekovizdravstvomk.fragments;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -24,11 +25,8 @@ import com.tadi.lekovizdravstvomk.R;
 import com.tadi.lekovizdravstvomk.adapter.DrugsAdapter;
 import com.tadi.lekovizdravstvomk.adapter.DrugsFilterAdapter;
 import com.tadi.lekovizdravstvomk.model.Drug;
+import com.tadi.lekovizdravstvomk.model.MonitoringDatabase;
 import com.tadi.lekovizdravstvomk.model.WayOfPublishing;
-import com.yalantis.filter.listener.FilterListener;
-import com.yalantis.filter.widget.Filter;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +45,7 @@ public class FavouriteDrugsFragment extends BaseFragment {
     private FirebaseDatabase mFirebaseInstance;
 
     private List<WayOfPublishing> wayOfPublishingList;
-    private List<Drug> drugsList;
+    private static List<Drug> drugsList;
     private List<Drug> tempDrugList;
     private DrugsAdapter mAdapter;
     public ArrayList<String> itemFilters;
@@ -61,7 +59,19 @@ public class FavouriteDrugsFragment extends BaseFragment {
     public FavouriteDrugsFragment() {
         // Required empty public constructor
     }
-
+    @Override
+    public void setArguments(Bundle args) {
+//        drugsList = args.getParcelable("data_item");
+        super.setArguments(args);
+    }
+    public static FavouriteDrugsFragment newInstance(List<Drug> dataItem) {
+        FavouriteDrugsFragment fragment = new FavouriteDrugsFragment();
+        Bundle b = new Bundle();
+        FavouriteDrugsFragment.drugsList = dataItem;
+        b.putParcelableArrayList("data_item", (ArrayList<? extends Parcelable>) dataItem);
+        fragment.setArguments(b);
+        return fragment;
+    }
 
     private Unbinder unbinder;
 
@@ -81,57 +91,6 @@ public class FavouriteDrugsFragment extends BaseFragment {
     private void initComponents() {
         itemFilters = new ArrayList<>();
         loader.setVisibility(View.VISIBLE);
-        drugsList = new ArrayList<>();
-        mFirebaseInstance = FirebaseDatabase.getInstance();
-        mFirebaseInstance.getReference("drugsregister").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e(TAG, "App dataSnapshot updated");
-                drugsList.clear();
-                try {
-
-                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                        drugsList.add(userSnapshot.getValue(Drug.class));
-                    }
-
-                } catch (Exception ex){
-                    Log.w("Exception", ex.toString());
-                }
-                tempDrugList = new ArrayList<>();
-                tempDrugList.addAll(drugsList);
-                loader.setVisibility(View.GONE);
-                mAdapter.notifyDataSetChanged();
-
-
-                mFirebaseInstance.getReference("Favourite").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        wayOfPublishingList = new ArrayList<>();
-                        try {
-
-                            for (DataSnapshot wayOfPublishingSnapshot : dataSnapshot.getChildren()) {
-                                wayOfPublishingList.add(wayOfPublishingSnapshot.getValue(WayOfPublishing.class));
-                            }
-                        } catch (Exception ex){
-                            Log.w("Exception", ex.toString());
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
-                        Log.e(TAG, "Failed to read app title value.", error.toException());
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.e(TAG, "Failed to read app title value.", error.toException());
-            }
-        });
-
 
 
     }
@@ -143,6 +102,7 @@ public class FavouriteDrugsFragment extends BaseFragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
+        loader.setVisibility(View.GONE);
 
     }
 
@@ -233,38 +193,6 @@ public class FavouriteDrugsFragment extends BaseFragment {
         }
     };
 
-    private FilterListener<WayOfPublishing> mListener = new FilterListener<WayOfPublishing>() {
-
-        @Override
-        public void onFilterDeselected(WayOfPublishing wayOfPublishing) {
-            for (int i = 0; i < itemFilters.size(); i++) {
-                if(itemFilters.get(i).equalsIgnoreCase(wayOfPublishing.getOpis())){
-                    itemFilters.remove(i);
-                    break;
-                }
-            }
-            fiterByCategory();
-        }
-
-        @Override
-        public void onFilterSelected(WayOfPublishing wayOfPublishing) {
-            itemFilters.add(wayOfPublishing.getOpis());
-            fiterByCategory();
-        }
-
-        @Override
-        public void onFiltersSelected(@NotNull ArrayList<WayOfPublishing> filters) {
-
-        }
-
-        @Override
-        public void onNothingSelected() {
-
-        }
-
-
-
-    };
 
     private void fiterByCategory() {
         drugsList.clear();

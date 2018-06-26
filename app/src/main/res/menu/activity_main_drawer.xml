@@ -13,7 +13,7 @@
             android:icon="@drawable/ic_menu_gallery"
             android:title="Reminder" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_favorite"
             android:icon="@android:drawable/star_on"
             android:title="Favorite" />
         <item
@@ -21,9 +21,9 @@
             android:icon="@android:drawable/ic_dialog_map"
             android:title="Map" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/my_coments"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Contact" />
+            android:title="My Comments" />
     </group>
 
     <item android:title="Communicate">

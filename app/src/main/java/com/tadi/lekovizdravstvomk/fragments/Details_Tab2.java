@@ -31,14 +31,23 @@ public class Details_Tab2 extends Fragment {
     TextView text_datum_resenie;
     public static Drug data;
 
-    public static Details_Tab2 newInstance(Drug data) {
+
+
+    @Override
+    public void setArguments(Bundle args) {
+        data = args.getParcelable("data_item");
+        super.setArguments(args);
+    }
+
+    public static Details_Tab2 newInstance(Drug dataItem) {
         Details_Tab2 fragment = new Details_Tab2();
         Bundle b = new Bundle();
-        Details_Tab2.data = data;
-
+        DrugsDetailsFragment.data = dataItem;
+        b.putParcelable("data_item", dataItem);
         fragment.setArguments(b);
         return fragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
