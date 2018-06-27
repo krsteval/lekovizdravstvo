@@ -78,7 +78,7 @@ public class FavouriteDrugsFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_drugs_register, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorite_drugs_register, container, false);
         unbinder = ButterKnife.bind(this, view);
 
         initComponents();

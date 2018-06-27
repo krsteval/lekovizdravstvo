@@ -63,6 +63,7 @@ public class DrugsRegisterFragment extends BaseFragment {
     private List<Drug> drugsList;
     private List<Drug> tempDrugList;
     private DrugsAdapter mAdapter;
+    private DrugsFilterAdapter  drugsFilterAdapter;
     public ArrayList<String> itemFilters;
 
     @BindView(R.id.recycler_view)
@@ -73,8 +74,11 @@ public class DrugsRegisterFragment extends BaseFragment {
 
     private AdView mAdView;
 
-    @BindView(R.id.floatingActionButton2)
-    FloatingActionButton fab2;
+    @BindView(R.id.filter)
+    Filter mFilter;
+
+    //    FloatingActionButton fab2;
+//    @BindView(R.id.floatingActionButton2)
 
     MyFabFragmentFilter dialogFrag;
 
@@ -101,14 +105,15 @@ public class DrugsRegisterFragment extends BaseFragment {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        dialogFrag = MyFabFragmentFilter.newInstance();
-        dialogFrag.setParentFab(fab2);
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogFrag.show(getActivity().getSupportFragmentManager(), dialogFrag.getTag());
-            }
-        });
+
+//        dialogFrag = MyFabFragmentFilter.newInstance();
+//        dialogFrag.setParentFab(fab2);
+//        fab2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialogFrag.show(getActivity().getSupportFragmentManager(), dialogFrag.getTag());
+//            }
+//        });
         return view;
     }
 
@@ -116,9 +121,9 @@ public class DrugsRegisterFragment extends BaseFragment {
         itemFilters = new ArrayList<>();
         loader.setVisibility(View.VISIBLE);
         drugsList = new ArrayList<>();
-
-//        Filter mFilter = (Filter<WayOfPublishing>) getView().findViewById(R.id.filter);
-//        mFilter.setAdapter(new DrugsFilterAdapter(wayOfPublishingList, getContext()));
+        wayOfPublishingList = new ArrayList<>();
+//        drugsFilterAdapter= new DrugsFilterAdapter(wayOfPublishingList, getContext());
+//        mFilter.setAdapter(drugsFilterAdapter);
 //        mFilter.setListener(mListener);
 //
 //        mFilter.setNoSelectedItemText("Selected items");
@@ -164,11 +169,12 @@ public class DrugsRegisterFragment extends BaseFragment {
                                 wayOfPublishingList.add(wayOfPublishingSnapshot.getValue(WayOfPublishing.class));
                             }
 //                            Filter mFilter = (Filter<WayOfPublishing>) getView().findViewById(R.id.filter);
-//                            mFilter.setAdapter(new DrugsFilterAdapter(wayOfPublishingList, getContext()));
-//                            mFilter.setListener(mListener);
-//
-//                            mFilter.setNoSelectedItemText("Selected items");
-//                            mFilter.build();
+                            mFilter.setAdapter(new DrugsFilterAdapter(wayOfPublishingList, getContext()));
+                            mFilter.setListener(mListener);
+
+                            mFilter.setNoSelectedItemText("Selected items");
+                            mFilter.build();
+
                         } catch (Exception ex){
                             Log.w("Exception", ex.toString());
                         }

@@ -363,8 +363,8 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             Intent intent = new Intent(MainActivity.this, MyProfile.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
+        } else if (id == R.id.nav_drug_list) {
+            loadFragmentForAction("drug_register", null);
         } else if (id == R.id.nav_favorite) {
             loadFragmentForAction("favorite", null);
         } else if (id == R.id.nav_map) {
