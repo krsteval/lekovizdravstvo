@@ -1,49 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.allattentionhere.fabulousfilter.AAH_FilterView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.DrugsRegisterFragment">
+    android:background="@color/white"
+    tools:context=".fragments.DrugsRegisterFragment"
+    android:orientation="vertical">
 
-
-    <ProgressBar
-        android:id="@+id/loader"
+    <RelativeLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
-
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        ads:adSize="BANNER"
-        ads:adUnitId="ca-app-pub-5161878407094994/2230527420">
-    </com.google.android.gms.ads.AdView>
+        android:layout_height="match_parent">
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_marginTop="24dp"
-        android:layout_marginRight="16dp"
-        android:layout_alignParentRight="true"
-        android:tint="@color/filters_chips"
-        android:id="@+id/fab2"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:srcCompat="@drawable/ic_filter"
-        app:backgroundTint="@color/filtersfab"
-        app:elevation="0dp" />
+        <ProgressBar
+            android:id="@+id/loader"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:visibility="gone" />
 
-</RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="BANNER"
+            ads:adUnitId="ca-app-pub-5161878407094994/2230527420" />
+
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/floatingActionButton2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="24dp"
+            android:tint="@color/filters_chips"
+            app:backgroundTint="@color/filtersfab"
+            app:elevation="0dp"
+            app:srcCompat="@drawable/ic_filter" />
+
+    </RelativeLayout>
+</com.allattentionhere.fabulousfilter.AAH_FilterView>

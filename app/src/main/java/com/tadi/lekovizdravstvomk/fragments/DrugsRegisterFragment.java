@@ -73,7 +73,9 @@ public class DrugsRegisterFragment extends BaseFragment {
 
     private AdView mAdView;
 
+    @BindView(R.id.floatingActionButton2)
     FloatingActionButton fab2;
+
     MyFabFragmentFilter dialogFrag;
 
     public DrugsRegisterFragment() {
@@ -101,7 +103,6 @@ public class DrugsRegisterFragment extends BaseFragment {
 
         dialogFrag = MyFabFragmentFilter.newInstance();
         dialogFrag.setParentFab(fab2);
-        fab2 = (FloatingActionButton)view.findViewById(R.id.fab2);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
