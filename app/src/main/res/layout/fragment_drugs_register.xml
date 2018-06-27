@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.DrugsRegisterFragment">
 
 
@@ -11,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="center"
+        android:layout_centerInParent="true"
         android:visibility="gone"
         />
 
@@ -20,5 +22,28 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical" />
 
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-5161878407094994/2230527420">
+    </com.google.android.gms.ads.AdView>
 
-</FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_marginTop="24dp"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentRight="true"
+        android:tint="@color/filters_chips"
+        android:id="@+id/fab2"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:srcCompat="@drawable/ic_filter"
+        app:backgroundTint="@color/filtersfab"
+        app:elevation="0dp" />
+
+</RelativeLayout>

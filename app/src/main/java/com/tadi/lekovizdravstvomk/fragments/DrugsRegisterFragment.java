@@ -1,9 +1,11 @@
 package com.tadi.lekovizdravstvomk.fragments;
 
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -14,9 +16,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -65,6 +71,11 @@ public class DrugsRegisterFragment extends BaseFragment {
     @BindView(R.id.loader)
     ProgressBar loader;
 
+    private AdView mAdView;
+
+    FloatingActionButton fab2;
+    MyFabFragmentFilter dialogFrag;
+
     public DrugsRegisterFragment() {
         // Required empty public constructor
     }
@@ -82,6 +93,21 @@ public class DrugsRegisterFragment extends BaseFragment {
         setDataFromServer();
 
         handleIntent(getActivity().getIntent());
+
+
+        mAdView = view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+        dialogFrag = MyFabFragmentFilter.newInstance();
+        dialogFrag.setParentFab(fab2);
+        fab2 = (FloatingActionButton)view.findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogFrag.show(getActivity().getSupportFragmentManager(), dialogFrag.getTag());
+            }
+        });
         return view;
     }
 
@@ -322,4 +348,6 @@ public class DrugsRegisterFragment extends BaseFragment {
         drugsList.addAll(rezDrugList);
         mAdapter.notifyDataSetChanged();
     }
+
+
 }

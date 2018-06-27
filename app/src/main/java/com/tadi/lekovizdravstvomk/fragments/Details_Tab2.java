@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.tadi.lekovizdravstvomk.R;
 import com.tadi.lekovizdravstvomk.model.Drug;
 
@@ -31,7 +33,7 @@ public class Details_Tab2 extends Fragment {
     TextView text_datum_resenie;
     public static Drug data;
 
-
+    private AdView mAdView;
 
     @Override
     public void setArguments(Bundle args) {
@@ -60,6 +62,10 @@ public class Details_Tab2 extends Fragment {
         text_datum_resenie.setText(data.getDatum_na_resenie());
         text_datum_vaznost.setText(data.getDatum_na_vaznost());
 
+
+        mAdView = view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         return view;
     }

@@ -50,4 +50,12 @@
     <color name="transparent_black">#6000</color>
     <color name="fab_default_color">#e7e7e7</color>
     <color name="fab_default_icon_color">#263238</color>
+
+
+
+    <color name="filtersfab">#3f51b5</color>
+    <color name="filters_header">#303f9f</color>
+    <color name="filters_buttons">#ff4081</color>
+    <color name="filters_buttons_selected">#c2185b</color>
+    <color name="filters_chips">#b3e5fc</color>
 </resources>

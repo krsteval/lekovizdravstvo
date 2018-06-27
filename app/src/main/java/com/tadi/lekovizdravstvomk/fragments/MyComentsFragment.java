@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +52,7 @@ public class MyComentsFragment extends BaseFragment {
     RecyclerView recyclerView;
     List<ReviewForDrugs> reviewForDrugItems;
 
+    private AdView mAdView;
     public MyComentsFragment() {
         // Required empty public constructor
     }
@@ -74,6 +77,10 @@ public class MyComentsFragment extends BaseFragment {
         mFirebaseInstance = FirebaseDatabase.getInstance();
 
         updateListItems();
+
+        mAdView = view.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         return view;
     }

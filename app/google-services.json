@@ -23,8 +23,20 @@
           }
         },
         {
-          "client_id": "788103915647-oh7h9qi08m3pf5si8g5f5oibhmaq2rs5.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "788103915647-j8u12jbtsc8o86m12n8fuluee2f5sfnn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tadi.lekovizdravstvomk",
+            "certificate_hash": "a109ce9f385e83fa9d0eafde5c5fb7e7acd35b1c"
+          }
+        },
+        {
+          "client_id": "788103915647-a5cbvakfs033ungbl7k2973jlk166nu9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tadi.lekovizdravstvomk",
+            "certificate_hash": "5b5e8055aa3f15238b00284f08aaacefb88227a9"
+          }
         },
         {
           "client_id": "788103915647-oh7h9qi08m3pf5si8g5f5oibhmaq2rs5.apps.googleusercontent.com",

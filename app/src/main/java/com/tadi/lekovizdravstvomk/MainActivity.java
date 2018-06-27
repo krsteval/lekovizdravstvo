@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.util.ArrayMap;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +27,17 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.allattentionhere.fabulousfilter.AAH_FabulousFragment;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.formats.NativeAdOptions;
+import com.google.android.gms.ads.formats.NativeAppInstallAd;
+import com.google.android.gms.ads.formats.NativeContentAd;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
@@ -52,11 +64,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener,
+
+        RewardedVideoAdListener,
+         AAH_FabulousFragment.Callbacks, AAH_FabulousFragment.AnimationListener
+        {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static boolean doubleBackToExitPressedOnce = false;
-
+    private RewardedVideoAd mRewardedVideoAd;
+    AdLoader adLoader;
     private FirebaseAuth auth;
     private FirebaseUser user;
     private FirebaseAuth.AuthStateListener authListener;
@@ -90,7 +107,9 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
                 Snackbar.make(view, "Contact administrator of app", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
@@ -109,6 +128,14 @@ public class MainActivity extends AppCompatActivity
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
+
+        //ca-app-pub-4089031262831925~3261264146
+        MobileAds.initialize(this, "ca-app-pub-5161878407094994/4828770607");
+
+        // Use an activity context to get the rewarded video instance.
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(this);
+
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -120,6 +147,9 @@ public class MainActivity extends AppCompatActivity
 //                    textViewUserName.setText(user.getEmail());
                     textViewUserEmail.setText(user.getEmail());
                     Common.getInstance().emailAddressIdentifire = user.getEmail();
+
+
+                    loadRewardedVideoAd();
                 }
                 //get current user
                 if (user == null) {
@@ -137,6 +167,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void loadRewardedVideoAd() {
+
+        mRewardedVideoAd.loadAd("ca-app-pub-5161878407094994/4828770607",
+                new AdRequest.Builder().build());
+    }
 
     public void loadFragmentForAction(String action, Object additionalData) {
 
@@ -202,12 +237,9 @@ public class MainActivity extends AppCompatActivity
             transaction.addToBackStack(action + (((BaseFragment) fragment).skipBack() ? "_skip_back" : ""));
             ft.commitAllowingStateLoss();
         }
+
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     private void checkActiveFragment() {
         if(fab != null)
@@ -220,6 +252,34 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
+//    public void setBanner(){
+//        adLoader = new AdLoader.Builder(getBaseContext(), "ca-app-pub-3940256099942544/2247696110")
+//                .forAppInstallAd(new NativeAppInstallAd.OnAppInstallAdLoadedListener() {
+//                    @Override
+//                    public void onAppInstallAdLoaded(NativeAppInstallAd appInstallAd) {
+//                        // Show the app install ad.
+//                    }
+//                })
+//                .forContentAd(new NativeContentAd.OnContentAdLoadedListener() {
+//                    @Override
+//                    public void onContentAdLoaded(NativeContentAd contentAd) {
+//                        // Show the content ad.
+//                    }
+//                })
+//                .withAdListener(new AdListener() {
+//                    @Override
+//                    public void onAdFailedToLoad(int errorCode) {
+//                        // Handle the failure by logging, altering the UI, and so on.
+//                    }
+//                })
+//                .withNativeAdOptions(new NativeAdOptions.Builder()
+//                        // Methods in the NativeAdOptions.Builder class can be
+//                        // used here to specify individual options settings.
+//                        .build())
+//                .build();
+//    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -426,5 +486,101 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+        @Override
+        public void onRewarded(RewardItem reward) {
+            Toast.makeText(this, "onRewarded! currency: " + reward.getType() + "  amount: " +
+                    reward.getAmount(), Toast.LENGTH_SHORT).show();
+            // Reward the user.
+        }
 
-}
+        @Override
+        public void onRewardedVideoAdLeftApplication() {
+            Toast.makeText(this, "onRewardedVideoAdLeftApplication",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        public ArrayMap<String, List<String>> getApplied_filters() {
+            return new ArrayMap<>();
+        }
+
+        @Override
+        public void onRewardedVideoAdFailedToLoad(int errorCode) {
+            Toast.makeText(this, "No video found", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRewardedVideoAdLoaded() {
+            try {
+                if (mRewardedVideoAd.isLoaded()) {
+                    mRewardedVideoAd.show();
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(this, "onRewardedVideoAdLoaded", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRewardedVideoAdOpened() {
+            Toast.makeText(this, "onRewardedVideoAdOpened", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRewardedVideoStarted() {
+            Toast.makeText(this, "onRewardedVideoStarted", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRewardedVideoCompleted() {
+            Toast.makeText(this, "onRewardedVideoCompleted", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRewardedVideoAdClosed() {
+            // Load the next rewarded video ad.
+            loadRewardedVideoAd();
+        }
+
+        @Override
+        public void onResume() {
+            mRewardedVideoAd.resume(this);
+            super.onResume();
+        }
+
+        @Override
+        public void onPause() {
+            mRewardedVideoAd.pause(this);
+            super.onPause();
+        }
+
+        @Override
+        public void onDestroy() {
+            mRewardedVideoAd.destroy(this);
+            super.onDestroy();
+        }
+
+            @Override
+            public void onOpenAnimationStart() {
+
+            }
+
+            @Override
+            public void onOpenAnimationEnd() {
+
+            }
+
+            @Override
+            public void onCloseAnimationStart() {
+
+            }
+
+            @Override
+            public void onCloseAnimationEnd() {
+
+            }
+
+            @Override
+            public void onResult(Object result) {
+
+            }
+        }
