@@ -34,6 +34,88 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <EditText
+            android:id="@+id/current_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:enabled="false"
+            android:singleLine="true" />
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false">
+
+            <RelativeLayout
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/image_icon_proizvoditel"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:src="@android:drawable/ic_input_get"
+                    />
+                <TextView
+                    android:id="@+id/brojPostaveniKomentari"
+                    android:layout_toRightOf="@+id/image_icon_proizvoditel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12dp"
+                    android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:text="Proizvoditel"  />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/layoutCena"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_margin="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/image_icon_cena"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/fab_margin"
+                    android:src="@android:drawable/star_big_off"
+                    />
+                <TextView
+                    android:id="@+id/brojOmileniLekovi"
+                    android:layout_toRightOf="@+id/image_icon_cena"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:textColor="@color/bg_register"
+                    android:textSize="12dp"
+                    android:ellipsize="marquee"
+                    android:fadingEdge="horizontal"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:layout_centerVertical="true"
+                    android:text="Cena"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+        <EditText
             android:id="@+id/old_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -56,7 +138,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
-            android:hint="@string/hint_password"
+            android:hint="@string/old_password"
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"

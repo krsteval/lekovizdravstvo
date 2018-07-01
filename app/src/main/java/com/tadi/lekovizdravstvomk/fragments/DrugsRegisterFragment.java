@@ -155,7 +155,6 @@ public class DrugsRegisterFragment extends BaseFragment {
                 }
                 tempDrugList = new ArrayList<>();
                 tempDrugList.addAll(drugsList);
-                loader.setVisibility(View.GONE);
                 mAdapter.notifyDataSetChanged();
 
 
@@ -174,6 +173,7 @@ public class DrugsRegisterFragment extends BaseFragment {
 
                             mFilter.setNoSelectedItemText("Selected items");
                             mFilter.build();
+                            loader.setVisibility(View.GONE);
 
                         } catch (Exception ex){
                             Log.w("Exception", ex.toString());
@@ -196,7 +196,10 @@ public class DrugsRegisterFragment extends BaseFragment {
         });
 
 
+        if(loader!=null){
 
+            loader.setVisibility(View.GONE);
+        }
     }
 
     private void setDataFromServer() {

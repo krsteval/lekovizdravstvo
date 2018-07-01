@@ -34,6 +34,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
             android:ellipsize="marquee"
+            android:singleLine="true"
             android:fadingEdge="horizontal"
             android:marqueeRepeatLimit="marquee_forever"
             android:scrollHorizontally="true"
@@ -42,8 +43,9 @@
             android:textStyle="bold"  />
         <TextView
             android:id="@+id/dateCreated"
-            android:text="22.11.2018"
-            android:layout_width="wrap_content"
+            android:text="22.11.2018  99:99"
+            android:layout_width="100dp"
+            android:gravity="end"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
@@ -60,15 +62,10 @@
         android:id="@+id/message"
         android:layout_toRightOf="@+id/image_icon_generika"
         android:text="Opissss s ss "
+        android:layout_marginStart="45dp"
         android:layout_centerVertical="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:scrollHorizontally="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:textSize="12dp" />
 
 

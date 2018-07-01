@@ -50,7 +50,7 @@ public class MyFabFragmentFilter extends AAH_FabulousFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        applied_filters = ((MainActivity) getActivity()).getApplied_filters();
+        applied_filters = null;
         metrics = this.getResources().getDisplayMetrics();
 
         for (Map.Entry<String, List<String>> entry : applied_filters.entrySet()) {

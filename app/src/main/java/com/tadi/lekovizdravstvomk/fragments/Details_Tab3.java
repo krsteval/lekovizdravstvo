@@ -54,7 +54,9 @@ public class Details_Tab3 extends Fragment {
     Button btnAddReview;
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+
     List<ReviewForDrugs> reviewForDrugItems;
+    CommentAdapter adapter;
 
     public Details_Tab3() {
         // Required empty public constructor
@@ -97,13 +99,14 @@ public class Details_Tab3 extends Fragment {
                         drugId = mFirebaseDatabase.push().getKey();
                     }
                     DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                    DateFormat dateID = new SimpleDateFormat("ddMMyyyyHHmmss");
                     Date date = new Date();
                     ReviewForDrugs review = new ReviewForDrugs();
                     review.setIdDrug(data.getId());
                     review.setIdUser(Common.getInstance().emailAddressIdentifire);
                     review.setReviewBody(comment.getText().toString());
                     review.setDate(dateFormat.format(date));
-                    mFirebaseDatabase.child(drugId).setValue(review);
+                    mFirebaseDatabase.child(dateID.format(date)).setValue(review);
 
                     comment.setText("");
                 }
@@ -119,11 +122,14 @@ public class Details_Tab3 extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         reviewForDrugItems = new ArrayList<>();
+        adapter = new CommentAdapter(reviewForDrugItems);
+        recyclerView.setAdapter(adapter);
+
         mFirebaseInstance.getReference("ReviewForDrugs").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.e(TAG, "App dataSnapshot updated");
-
+                reviewForDrugItems.clear();
                 try {
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         ReviewForDrugs item = userSnapshot.getValue(ReviewForDrugs.class);
@@ -131,7 +137,7 @@ public class Details_Tab3 extends Fragment {
                             reviewForDrugItems.add(item);
 
                     }
-                    recyclerView.setAdapter(new CommentAdapter(reviewForDrugItems));
+                    adapter.notifyDataSetChanged();
 
                 } catch (Exception ex){
                     Log.w("Exception", ex.toString());

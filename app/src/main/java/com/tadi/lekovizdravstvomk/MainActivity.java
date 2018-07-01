@@ -60,20 +60,16 @@ import com.tadi.lekovizdravstvomk.model.Drug;
 import com.tadi.lekovizdravstvomk.model.MonitoringDatabase;
 
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener,
-
-        RewardedVideoAdListener,
-         AAH_FabulousFragment.Callbacks, AAH_FabulousFragment.AnimationListener
-        {
+        AAH_FabulousFragment.Callbacks, AAH_FabulousFragment.AnimationListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static boolean doubleBackToExitPressedOnce = false;
-    private RewardedVideoAd mRewardedVideoAd;
-    AdLoader adLoader;
     private FirebaseAuth auth;
     private FirebaseUser user;
     private FirebaseAuth.AuthStateListener authListener;
@@ -107,9 +103,6 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mRewardedVideoAd.show();
-                }
                 Snackbar.make(view, "Contact administrator of app", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
 
@@ -132,10 +125,6 @@ public class MainActivity extends AppCompatActivity
         //ca-app-pub-4089031262831925~3261264146
         MobileAds.initialize(this, "ca-app-pub-5161878407094994/4828770607");
 
-        // Use an activity context to get the rewarded video instance.
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
-        mRewardedVideoAd.setRewardedVideoAdListener(this);
-
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -143,13 +132,10 @@ public class MainActivity extends AppCompatActivity
 
                 View header = navigationView.getHeaderView(0);
                 TextView textViewUserEmail = (TextView) header.findViewById(R.id.userEmail);
-                if(user!= null){
+                if (user != null) {
 //                    textViewUserName.setText(user.getEmail());
                     textViewUserEmail.setText(user.getEmail());
                     Common.getInstance().emailAddressIdentifire = user.getEmail();
-
-
-                    loadRewardedVideoAd();
                 }
                 //get current user
                 if (user == null) {
@@ -167,12 +153,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void loadRewardedVideoAd() {
-
-        mRewardedVideoAd.loadAd("ca-app-pub-5161878407094994/4828770607",
-                new AdRequest.Builder().build());
-    }
-
     public void loadFragmentForAction(String action, Object additionalData) {
 
         Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(action);
@@ -188,22 +168,19 @@ public class MainActivity extends AppCompatActivity
             fab.setVisibility(View.GONE);
             fragment = new DrugsRegisterFragment();
 
-        }
-        else if (action.equals("map_locations")) {
+        } else if (action.equals("map_locations")) {
             fab.setVisibility(View.GONE);
             fragment = new MapFragment();
 
             itemSearch.setVisible(false);
             itemChangeView.setVisible(false);
-        }
-        else if (action.equals("my_comments")) {
+        } else if (action.equals("my_comments")) {
             fab.setVisibility(View.GONE);
             fragment = new MyComentsFragment();
 
             itemSearch.setVisible(false);
             itemChangeView.setVisible(false);
-        }
-        else if (action.equals("favorite")) {
+        } else if (action.equals("favorite")) {
             fab.setVisibility(View.GONE);
 
             List<Drug> drugsFavList = App.getDatabase().receptionDao().getAllFavoritesDrugs();
@@ -211,23 +188,21 @@ public class MainActivity extends AppCompatActivity
 
             itemSearch.setVisible(false);
             itemChangeView.setVisible(false);
-        }
-        else if (action.equals("contact")) {
+        } else if (action.equals("contact")) {
             fab.setVisibility(View.GONE);
             fragment = new ContactFragment();
 
             itemSearch.setVisible(false);
             itemChangeView.setVisible(false);
-        }
-        else if (action.equals("drug_register_details")) {
+        } else if (action.equals("drug_register_details")) {
             fab.setVisibility(View.GONE);
 
             itemSearch.setVisible(false);
             itemChangeView.setVisible(false);
 
             Drug drug = null;
-            if(additionalData instanceof Drug)
-                drug = (Drug)additionalData;
+            if (additionalData instanceof Drug)
+                drug = (Drug) additionalData;
             fragment = DrugsDetailsFragment.newInstance(drug);
         }
         if (fragment != null) {
@@ -242,9 +217,9 @@ public class MainActivity extends AppCompatActivity
 
 
     private void checkActiveFragment() {
-        if(fab != null)
+        if (fab != null)
             fab.setVisibility(View.VISIBLE);
-        if(menu!= null){
+        if (menu != null) {
             itemSearch = menu.findItem(R.id.action_search);
             itemChangeView = menu.findItem(R.id.action_changeview);
             itemSearch.setVisible(true);
@@ -296,22 +271,19 @@ public class MainActivity extends AppCompatActivity
         setupSearchView();
         return true;
     }
-    private void setupSearchView()
-    {
+
+    private void setupSearchView() {
 
         searchView.setIconifiedByDefault(true);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        if (searchManager != null)
-        {
+        if (searchManager != null) {
             List<SearchableInfo> searchables = searchManager.getSearchablesInGlobalSearch();
 
             // Try to use the "applications" global search provider
             SearchableInfo info = searchManager.getSearchableInfo(getComponentName());
-            for (SearchableInfo inf : searchables)
-            {
-                if (inf.getSuggestAuthority() != null && inf.getSuggestAuthority().startsWith("applications"))
-                {
+            for (SearchableInfo inf : searchables) {
+                if (inf.getSuggestAuthority() != null && inf.getSuggestAuthority().startsWith("applications")) {
                     info = inf;
                 }
             }
@@ -321,17 +293,18 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.action_search:
                 break;
             case R.id.action_changeview:
-                if(isGridFragment)
+                if (isGridFragment)
                     isGridFragment = false;
                 else
                     isGridFragment = true;
@@ -348,8 +321,8 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentByTag("drug_register");
-        if(fragment != null)
-            ((DrugsRegisterFragment)fragment).shangeView(isGridFragment);
+        if (fragment != null)
+            ((DrugsRegisterFragment) fragment).shangeView(isGridFragment);
 
     }
 
@@ -362,6 +335,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_profile) {
             // Handle the camera action
             Intent intent = new Intent(MainActivity.this, MyProfile.class);
+            intent.putExtra("EMAIL", user.getEmail());
             startActivity(intent);
         } else if (id == R.id.nav_drug_list) {
             loadFragmentForAction("drug_register", null);
@@ -406,8 +380,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onQueryTextSubmit(String query) {
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentByTag("drug_register");
-        if(fragment != null)
-            ((DrugsRegisterFragment)fragment).searchItems(query);
+        if (fragment != null)
+            ((DrugsRegisterFragment) fragment).searchItems(query);
 
         return false;
     }
@@ -421,8 +395,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onClose() {
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentByTag("drug_register");
-        if(fragment != null)
-            ((DrugsRegisterFragment)fragment).clearSearch();
+        if (fragment != null)
+            ((DrugsRegisterFragment) fragment).clearSearch();
         return false;
     }
 
@@ -432,6 +406,7 @@ public class MainActivity extends AppCompatActivity
             fm.popBackStack();
         }
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -486,101 +461,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-        @Override
-        public void onRewarded(RewardItem reward) {
-            Toast.makeText(this, "onRewarded! currency: " + reward.getType() + "  amount: " +
-                    reward.getAmount(), Toast.LENGTH_SHORT).show();
-            // Reward the user.
-        }
+    @Override
+    public void onOpenAnimationStart() {
 
-        @Override
-        public void onRewardedVideoAdLeftApplication() {
-            Toast.makeText(this, "onRewardedVideoAdLeftApplication",
-                    Toast.LENGTH_SHORT).show();
-        }
+    }
 
-        public ArrayMap<String, List<String>> getApplied_filters() {
-            return new ArrayMap<>();
-        }
+    @Override
+    public void onOpenAnimationEnd() {
 
-        @Override
-        public void onRewardedVideoAdFailedToLoad(int errorCode) {
-            Toast.makeText(this, "No video found", Toast.LENGTH_SHORT).show();
-        }
+    }
 
-        @Override
-        public void onRewardedVideoAdLoaded() {
-            try {
-                if (mRewardedVideoAd.isLoaded()) {
-                    mRewardedVideoAd.show();
-                }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
-            Toast.makeText(this, "onRewardedVideoAdLoaded", Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onCloseAnimationStart() {
 
-        @Override
-        public void onRewardedVideoAdOpened() {
-            Toast.makeText(this, "onRewardedVideoAdOpened", Toast.LENGTH_SHORT).show();
-        }
+    }
 
-        @Override
-        public void onRewardedVideoStarted() {
-            Toast.makeText(this, "onRewardedVideoStarted", Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onCloseAnimationEnd() {
 
-        @Override
-        public void onRewardedVideoCompleted() {
-            Toast.makeText(this, "onRewardedVideoCompleted", Toast.LENGTH_SHORT).show();
-        }
+    }
 
-        @Override
-        public void onRewardedVideoAdClosed() {
-            // Load the next rewarded video ad.
-            loadRewardedVideoAd();
-        }
+    @Override
+    public void onResult(Object result) {
 
-        @Override
-        public void onResume() {
-            mRewardedVideoAd.resume(this);
-            super.onResume();
-        }
-
-        @Override
-        public void onPause() {
-            mRewardedVideoAd.pause(this);
-            super.onPause();
-        }
-
-        @Override
-        public void onDestroy() {
-            mRewardedVideoAd.destroy(this);
-            super.onDestroy();
-        }
-
-            @Override
-            public void onOpenAnimationStart() {
-
-            }
-
-            @Override
-            public void onOpenAnimationEnd() {
-
-            }
-
-            @Override
-            public void onCloseAnimationStart() {
-
-            }
-
-            @Override
-            public void onCloseAnimationEnd() {
-
-            }
-
-            @Override
-            public void onResult(Object result) {
-
-            }
-        }
+    }
+}

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -47,6 +48,9 @@ public class MyComentsFragment extends BaseFragment {
     private Unbinder unbinder;
 
     public static Drug data;
+
+    @BindView(R.id.list_empty)
+    TextView emptyList;
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -104,8 +108,10 @@ public class MyComentsFragment extends BaseFragment {
                         if(item.getIdUser().equals(Common.getInstance().emailAddressIdentifire))
                             reviewForDrugItems.add(item);
                     }
+                    Common.getInstance().numberOfComments =reviewForDrugItems.size();
                     recyclerView.setAdapter(new CommentAdapter(reviewForDrugItems));
-
+                    if(reviewForDrugItems.size()==0)
+                        emptyList.setVisibility(View.VISIBLE);
                 } catch (Exception ex){
                     Log.w("Exception", ex.toString());
                 }

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,6 +56,9 @@ public class FavouriteDrugsFragment extends BaseFragment {
 
     @BindView(R.id.loader)
     ProgressBar loader;
+
+    @BindView(R.id.list_empty)
+    TextView emptyList;
 
     public FavouriteDrugsFragment() {
         // Required empty public constructor
@@ -132,6 +136,8 @@ public class FavouriteDrugsFragment extends BaseFragment {
         }
         drugsList.clear();
         drugsList.addAll(rezDrugList);
+        if(rezDrugList.size()==0)
+            emptyList.setVisibility(View.VISIBLE);
         mAdapter.notifyDataSetChanged();
     }
     private void handleIntent(Intent intent) {

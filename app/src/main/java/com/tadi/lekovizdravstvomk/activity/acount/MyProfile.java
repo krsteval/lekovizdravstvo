@@ -10,24 +10,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.tadi.lekovizdravstvomk.App;
 import com.tadi.lekovizdravstvomk.R;
 import com.tadi.lekovizdravstvomk.activity.LoginActivity;
+import com.tadi.lekovizdravstvomk.helpers.Common;
 
 public class MyProfile extends AppCompatActivity {
 
     private Button btnChangeEmail, btnChangePassword, btnSendResetEmail, btnRemoveUser,
             changeEmail, changePassword, sendEmail, remove, signOut;
 
-    private EditText oldEmail, newEmail, password, newPassword;
+    private EditText oldEmail, newEmail, password, newPassword, currentEmail;
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
+    TextView brojOmileniLekovi, brojPostaveniKomentari;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class MyProfile extends AppCompatActivity {
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
 
+        currentEmail = (EditText) findViewById(R.id.current_email);
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -79,6 +86,18 @@ public class MyProfile extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         newPassword = (EditText) findViewById(R.id.newPassword);
 
+        brojOmileniLekovi = (TextView) findViewById(R.id.brojOmileniLekovi);
+        brojPostaveniKomentari = (TextView) findViewById(R.id.brojPostaveniKomentari);
+
+        brojOmileniLekovi.setText(""+App.getDatabase().receptionDao().getAllFavoritesDrugs().size());
+        brojPostaveniKomentari.setText(""+Common.getInstance().numberOfComments );
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            currentEmail.setText(bundle.getString("EMAIL"));
+        }else {
+            currentEmail.setVisibility(View.GONE);
+        }
         oldEmail.setVisibility(View.GONE);
         newEmail.setVisibility(View.GONE);
         password.setVisibility(View.GONE);
@@ -139,7 +158,7 @@ public class MyProfile extends AppCompatActivity {
             public void onClick(View v) {
                 oldEmail.setVisibility(View.GONE);
                 newEmail.setVisibility(View.GONE);
-                password.setVisibility(View.GONE);
+                password.setVisibility(View.VISIBLE);
                 newPassword.setVisibility(View.VISIBLE);
                 changeEmail.setVisibility(View.GONE);
                 changePassword.setVisibility(View.VISIBLE);
@@ -162,21 +181,45 @@ public class MyProfile extends AppCompatActivity {
                         newPassword.setError("Password too short, enter minimum 6 characters");
                         progressBar.setVisibility(View.GONE);
                     } else {
-
-                        user.updatePassword(newPassword.getText().toString().trim())
+                        AuthCredential credential = EmailAuthProvider
+                                .getCredential(user.getEmail(), password.getText().toString().trim());
+                        user.reauthenticate(credential)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            Toast.makeText(MyProfile.this, "Password is updated, sign in with new password!", Toast.LENGTH_SHORT).show();
-                                            signOut();
-                                            progressBar.setVisibility(View.GONE);
+                                            user.updatePassword(newPassword.getText().toString().trim()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        Toast.makeText(MyProfile.this, "Password updated", Toast.LENGTH_SHORT).show();
+                                                        signOut();
+                                                    } else {
+                                                        Toast.makeText(MyProfile.this, "Error password not updated", Toast.LENGTH_SHORT).show();
+
+                                                    }
+                                                }
+                                            });
                                         } else {
-                                            Toast.makeText(MyProfile.this, "Failed to update password!", Toast.LENGTH_SHORT).show();
-                                            progressBar.setVisibility(View.GONE);
+                                            Toast.makeText(MyProfile.this, "Error auth failed", Toast.LENGTH_SHORT).show();
+
                                         }
                                     }
                                 });
+//                        user.updatePassword(newPassword.getText().toString().trim())
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        if (task.isSuccessful()) {
+//                                            Toast.makeText(MyProfile.this, "Password is updated, sign in with new password!", Toast.LENGTH_SHORT).show();
+//                                            signOut();
+//                                            progressBar.setVisibility(View.GONE);
+//                                        } else {
+//                                            Toast.makeText(MyProfile.this, "Failed to update password!", Toast.LENGTH_SHORT).show();
+//                                            progressBar.setVisibility(View.GONE);
+//                                        }
+//                                    }
+//                                });
                     }
                 } else if (newPassword.getText().toString().trim().equals("")) {
                     newPassword.setError("Enter password");

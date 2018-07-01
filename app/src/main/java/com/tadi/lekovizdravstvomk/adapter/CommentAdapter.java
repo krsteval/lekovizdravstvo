@@ -28,9 +28,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
             ime = (TextView) view.findViewById(R.id.ime);
             dateCreated = (TextView) view.findViewById(R.id.dateCreated);
             reviewBody = (TextView) view.findViewById(R.id.message);
-//            ime.setSelected(true);
             ime.setSelected(true);
-            reviewBody.setSelected(true);
         }
     }
 
