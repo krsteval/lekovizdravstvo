@@ -25,6 +25,7 @@
     <string name="new_pass">New Password</string>
     <string name="title_activity_profile">Lekovi Zdravstvo</string>
     <string name="hint_email">Email</string>
+    <string name="hint_current_email">Current Email</string>
     <string name="hint_add_comment">Insert review content..</string>
     <string name="hint_password">Password</string>
     <string name="old_password">Old Password</string>

@@ -86,11 +86,11 @@ public class MyProfile extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         newPassword = (EditText) findViewById(R.id.newPassword);
 
-        brojOmileniLekovi = (TextView) findViewById(R.id.brojOmileniLekovi);
-        brojPostaveniKomentari = (TextView) findViewById(R.id.brojPostaveniKomentari);
-
-        brojOmileniLekovi.setText(""+App.getDatabase().receptionDao().getAllFavoritesDrugs().size());
-        brojPostaveniKomentari.setText(""+Common.getInstance().numberOfComments );
+//        brojOmileniLekovi = (TextView) findViewById(R.id.brojOmileniLekovi);
+//        brojPostaveniKomentari = (TextView) findViewById(R.id.brojPostaveniKomentari);
+//
+//        brojOmileniLekovi.setText(""+App.getDatabase().receptionDao().getAllFavoritesDrugs().size());
+//        brojPostaveniKomentari.setText(""+Common.getInstance().numberOfComments );
 
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){

@@ -33,86 +33,95 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <EditText
-            android:id="@+id/current_email"
+        <android.support.design.widget.TextInputLayout
+            android:textColorHint="@color/light_grey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_email"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:enabled="false"
-            android:singleLine="true" />
+            >
 
+            <EditText
+                android:id="@+id/current_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="@string/hint_current_email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/image_icon_proizvoditel"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/fab_margin"
-                    android:src="@android:drawable/ic_input_get"
-                    />
+                    android:src="@android:drawable/ic_input_get" />
+
                 <TextView
                     android:id="@+id/brojPostaveniKomentari"
-                    android:layout_toRightOf="@+id/image_icon_proizvoditel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
                     android:layout_centerVertical="true"
-                    android:singleLine="true"
+                    android:layout_toRightOf="@+id/image_icon_proizvoditel"
                     android:ellipsize="marquee"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:scrollHorizontally="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:text="Proizvoditel"  />
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="Proizvoditel"
+                    android:textSize="12dp" />
             </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/layoutCena"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_margin="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/image_icon_cena"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/fab_margin"
-                    android:src="@android:drawable/star_big_off"
-                    />
+                    android:src="@android:drawable/star_big_off" />
+
                 <TextView
                     android:id="@+id/brojOmileniLekovi"
-                    android:layout_toRightOf="@+id/image_icon_cena"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:textColor="@color/bg_register"
-                    android:textSize="12dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/image_icon_cena"
                     android:ellipsize="marquee"
                     android:fadingEdge="horizontal"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:scrollHorizontally="true"
-                    android:layout_centerVertical="true"
+                    android:singleLine="true"
                     android:text="Cena"
-                    android:singleLine="true" />
+                    android:textColor="@color/bg_register"
+                    android:textSize="12dp" />
             </RelativeLayout>
 
         </LinearLayout>
-
 
 
         <EditText
@@ -206,8 +215,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/change_email"
-            android:visibility="gone"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/change_password_button"
@@ -250,10 +259,10 @@
     </LinearLayout>
 
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:visibility="visible" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="visible" />
 </android.support.design.widget.CoordinatorLayout>

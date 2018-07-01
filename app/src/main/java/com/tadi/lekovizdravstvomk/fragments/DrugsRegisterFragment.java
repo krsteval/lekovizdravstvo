@@ -152,6 +152,11 @@ public class DrugsRegisterFragment extends BaseFragment {
 
                 } catch (Exception ex){
                     Log.w("Exception", ex.toString());
+
+                    if(loader!=null){
+
+                        loader.setVisibility(View.GONE);
+                    }
                 }
                 tempDrugList = new ArrayList<>();
                 tempDrugList.addAll(drugsList);
@@ -177,13 +182,18 @@ public class DrugsRegisterFragment extends BaseFragment {
 
                         } catch (Exception ex){
                             Log.w("Exception", ex.toString());
+
+                            if(loader!=null){
+
+                                loader.setVisibility(View.GONE);
+                            }
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError error) {
                         // Failed to read value
-                        Log.e(TAG, "Failed to read app title value.", error.toException());
+                        Log.e(TAG, "Failed to read app value.", error.toException());
                     }
                 });
             }
@@ -191,15 +201,11 @@ public class DrugsRegisterFragment extends BaseFragment {
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
-                Log.e(TAG, "Failed to read app title value.", error.toException());
+                Log.e(TAG, "Failed to read app value.", error.toException());
             }
         });
 
 
-        if(loader!=null){
-
-            loader.setVisibility(View.GONE);
-        }
     }
 
     private void setDataFromServer() {
@@ -233,7 +239,12 @@ public class DrugsRegisterFragment extends BaseFragment {
         drugsList.addAll(tempDrugList);
         ArrayList<Drug> rezDrugList = new ArrayList<>();
         for (Drug item: drugsList) {
-            if(item.getLatinicno_ime().toLowerCase().contains(query.toLowerCase()) || item.getFarmacevska_forma().toLowerCase().contains(query.toLowerCase()) || item.getProizvoditel().toLowerCase().contains(query.toLowerCase()))
+            if(
+                    item.getIme().toLowerCase().contains(query.toLowerCase()) ||
+                    item.getLatinicno_ime().toLowerCase().contains(query.toLowerCase()) ||
+                    item.getFarmacevska_forma().toLowerCase().contains(query.toLowerCase()) ||
+                    item.getProizvoditel().toLowerCase().contains(query.toLowerCase())
+                )
                 rezDrugList.add(item);
         }
         drugsList.clear();
@@ -246,7 +257,7 @@ public class DrugsRegisterFragment extends BaseFragment {
 
 
             for (Drug item: drugsList) {
-                if(!item.getLatinicno_ime().toLowerCase().contains(query.toLowerCase()) && !item.getFarmacevska_forma().toLowerCase().contains(query.toLowerCase()))
+                if(!item.getIme().toLowerCase().contains(query.toLowerCase()) && !item.getLatinicno_ime().toLowerCase().contains(query.toLowerCase()) && !item.getFarmacevska_forma().toLowerCase().contains(query.toLowerCase()))
                     drugsList.remove(item);
             }
             mAdapter.notifyDataSetChanged();
