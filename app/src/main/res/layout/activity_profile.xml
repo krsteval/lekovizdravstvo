@@ -37,6 +37,8 @@
             android:textColorHint="@color/light_grey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/TextLabel"
+            app:hintTextAppearance="@style/TextLabel"
             >
 
             <EditText

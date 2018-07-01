@@ -3,6 +3,7 @@ package com.tadi.lekovizdravstvomk.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -120,7 +121,16 @@ public class ContactFragment extends BaseFragment {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
 
-            login_progress.setVisibility(View.VISIBLE);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"kostadina.mojsovska@gmail.com"});
+            intent.putExtra(Intent.EXTRA_SUBJECT, titleItem);
+            intent.putExtra(Intent.EXTRA_TEXT, bodyItem);
+
+            intent.setType("message/rfc822");
+
+            startActivity(Intent.createChooser(intent, "Select Email Sending App :"));
+
 
         }
     }
